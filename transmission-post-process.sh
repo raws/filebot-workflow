@@ -10,4 +10,4 @@
 			           "ut_kind=multi" \
 			           "ut_title=$TR_TORRENT_NAME" \
 			           "seriesFormat=tv/{n.replaceTrailingBrackets()}/Season {s}/{n.replaceTrailingBrackets()} - {s00e00} - {t}" \
-			           "moviesFormat=movies/{n.replaceTrailingBrackets()} ({y})/{n.replaceTrailingBrackets()} ({y})"
+			           "movieFormat=movies/{n.replaceTrailingBrackets()} ({y})/{n.replaceTrailingBrackets()} ({y})"
