@@ -130,12 +130,12 @@ def groups = input.groupBy{ f ->
 		return [tvs:   detectSeriesName(f) ?: detectSeriesName(f.dir.listFiles{ it.isVideo() })]
 	if (forceAnime(f))
 		return [anime: detectSeriesName(f) ?: detectSeriesName(f.dir.listFiles{ it.isVideo() })]
-	
-	
+
+
 	def tvs = detectSeriesName(f)
 	def mov = detectMovie(f, false)
 	_log.fine("$f.name [series: $tvs, movie: $mov]")
-	
+
 	// DECIDE EPISODE VS MOVIE (IF NOT CLEAR)
 	if (tvs && mov) {
 		def norm = { s -> s.ascii().normalizePunctuation().lower().space(' ') }
@@ -143,7 +143,7 @@ def groups = input.groupBy{ f ->
 		def fn = norm(f.nameWithoutExtension)
 		def sn = norm(tvs)
 		def mn = norm(mov.name)
-		
+
 		// S00E00 | 2012.07.21 | One Piece 217 | Firefly - Serenity | [Taken 1, Taken 2, Taken 3, Taken 4, ..., Taken 10]
 		if ((parseEpisodeNumber(fn, true) || parseDate(fn) || ([dn, fn].find{ it =~ sn && matchMovie(it, true) == null } && (parseEpisodeNumber(fn.after(sn), false) || fn.after(sn) =~ /\d{1,2}\D+\d{1,2}/) && matchMovie(fn, true) == null) || (fn.after(sn) ==~ /.{0,3} - .+/ && matchMovie(fn, true) == null) || f.dir.listFiles{ it.isVideo() && norm(it.name) =~ sn && it.name =~ /\b\d{1,3}\b/}.size() >= 10) && !tryQuietly{ def m = detectMovie(f, true); m.year >= 1950 && f.listPath().reverse().take(3).find{ it.name =~ m.year } }) {
 			_log.fine("Exclude Movie: $mov")
@@ -153,12 +153,12 @@ def groups = input.groupBy{ f ->
 			tvs = null
 		}
 	}
-	
+
 	// CHECK CONFLICT
 	if (((mov && tvs) || (!mov && !tvs)) && failOnError) {
 		throw new Exception("Media detection failed")
 	}
-	
+
 	return [tvs: tvs, mov: mov, anime: null]
 }
 
@@ -175,7 +175,7 @@ groups.each{ group, files ->
 			tempFiles += subtitleFiles // if downloaded for temporarily extraced files delete later
 		}
 	}
-	
+
 	// EPISODE MODE
 	if ((group.tvs || group.anime) && !group.mov) {
 		// choose series / anime config
@@ -199,7 +199,7 @@ groups.each{ group, files ->
 			throw new Exception("Failed to rename series: $config.name")
 		}
 	}
-	
+
 	// MOVIE MODE
 	if (group.mov && !group.tvs && !group.anime) {
 		def dest = rename(file:files, format:format.mov, db:'TheMovieDB')
@@ -213,7 +213,7 @@ groups.each{ group, files ->
 			throw new Exception("Failed to rename movie: $group.mov")
 		}
 	}
-	
+
 	// MUSIC MODE
 	if (group.music) {
 		def dest = rename(file:files, format:format.music, db:'AcoustID')
@@ -265,7 +265,7 @@ if (myepisodes) {
 if (pushover) {
 	// include webservice utility
 	include('fn:lib/ws')
-	
+
 	_log.info 'Sending Pushover notification'
 	Pushover(pushover).send("Finished processing ${tryQuietly { ut_title } ?: input*.dir.name.unique()} (${getRenameLog().size()} files).")
 }
@@ -274,11 +274,11 @@ if (pushover) {
 if (gmail) {
 	// ant/mail utility
 	include('fn:lib/ant')
-	
+
 	// send html mail
 	def renameLog = getRenameLog()
 	def emailTitle = tryQuietly { ut_title } ?: input*.dir.name.unique()
-	
+
 	sendGmail(
 		subject: "[FileBot] ${emailTitle}",
 		message: XML {
@@ -322,7 +322,7 @@ if (clean) {
 			if (it.getFiles().isEmpty()) it.deleteDir()
 		}
 	}
-	
+
 	// deleting remaining files only makes sense after moving files
 	if ('MOVE'.equalsIgnoreCase(_args.action)) {
 		_log.info 'Clean clutter files and empty folders'
