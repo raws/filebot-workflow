@@ -74,6 +74,7 @@ def resolveInput(f) {
 
 // Create a hard link from source to destination
 def hardLink(from, to) {
+	execute('mkdir', '-p', new File(to).getParent())
 	execute('ln', from, to)
 }
 
