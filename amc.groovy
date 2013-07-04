@@ -186,7 +186,7 @@ groups.each{ group, files ->
 		// choose series / anime config
 		def config = group.tvs ? [name:group.tvs,   format:format.tvs,   db:'TheTVDB', seasonFolder:true ]
 		                       : [name:group.anime, format:format.anime, db:'AniDB',   seasonFolder:false]
-		def dest = rename(file: files, format: config.format, db: config.db, action: &hardLink)
+		def dest = rename(file: files, format: config.format, db: config.db, action: this.&hardLink)
 		if (dest && artwork) {
 			dest.mapByFolder().each{ dir, fs ->
 				_log.finest "Fetching artwork for $dir from TheTVDB"
@@ -207,7 +207,7 @@ groups.each{ group, files ->
 
 	// MOVIE MODE
 	if (group.mov && !group.tvs && !group.anime) {
-		def dest = rename(file:files, format:format.mov, db:'TheMovieDB', action: &hardLink)
+		def dest = rename(file:files, format:format.mov, db:'TheMovieDB', action: this.&hardLink)
 		if (dest && artwork) {
 			dest.mapByFolder().each{ dir, fs ->
 				_log.finest "Fetching artwork for $dir from TheMovieDB"
@@ -221,7 +221,7 @@ groups.each{ group, files ->
 
 	// MUSIC MODE
 	if (group.music) {
-		def dest = rename(file:files, format:format.music, db:'AcoustID', action: &hardLink)
+		def dest = rename(file:files, format:format.music, db:'AcoustID', action: this.&hardLink)
 		if (dest == null && failOnError) {
 			throw new Exception("Failed to rename music: $group.music")
 		}
