@@ -27,7 +27,7 @@ fi
 
 /usr/bin/filebot  -script "/volume1/@appstore/filebot-workflow/amc.groovy" \
                  --output "/volume1" \
-                 --log-file "/volume1/@appstore/transmission/var/filebot.log" \
+                 --log-file "/volume1/@appstore/filebot-workflow/filebot.log" \
                  --conflict override \
                   -non-strict \
                  --def music=n \
