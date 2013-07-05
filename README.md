@@ -26,27 +26,11 @@ Other torrent clients probably have similar configuration options.
 
 ### Running manually
 
-To run the script manually and organize files at any path, you can use something like the following on BusyBox embedded Linux with Ruby 1.9, like I have on my Synology NAS:
-
-```ruby
-path = $_.strip.force_encoding("utf-8")
-
-command = [
-  'env',
-  "TR_TORRENT_DIR=#{File.dirname(path).shellescape}",
-  "TR_TORRENT_NAME=#{File.basename(path).shellescape}",
-  '/volume1/@appstore/filebot-workflow/transmission-post-process.sh'
-].join(' ')
-
-puts command
-system command
-```
+To run the script manually and organize files at any path, you can use something like the following:
 
 ```bash
-find /volume1/torrents/Seeding -mindepth 1 -maxdepth 1 -print | ruby -rshellwords -n transmission-post-process.rb
+find /volume1/torrents/Seeding -mindepth 1 -maxdepth 1 -exec transmission-post-process.sh {} \;
 ```
-
-(The above is pretty hacked together and should be rewritten without shelling out through Ruby.)
 
 ### Git workflow
 
