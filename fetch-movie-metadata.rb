@@ -95,7 +95,16 @@ end
 metadata :plot, 'Plot'
 metadata :poster, 'Poster'
 metadata :rating, 'Rated'
-metadata(:released, 'Released') { |released|Date.parse(released).iso8601 }
+
+metadata(:released, 'Released') do |released|
+  released = Date.parse(released) rescue nil
+
+  {
+    day: released && released.day,
+    month: released && released.month,
+    year: (released && released.year) || @year
+  }
+end
 
 metadata :rotten_tomatoes do
   {}.tap do |metadata|
@@ -126,6 +135,5 @@ metadata :studio, 'Production'
 metadata(:title) { @title }
 metadata(:type) { 'movie' }
 metadata(:writers, 'Writer') { |writers| writers.split(/,\s*/) }
-metadata(:year) { @year }
 
 puts JSON.pretty_generate(@metadata)
