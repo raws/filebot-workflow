@@ -4,7 +4,7 @@ This is my [FileBot](http://filebot.net) workflow which automatically identifies
 
 Files are renamed and organized like this:
 
-* **Movie:** `/volume1/movies/Independence Day (1998)/Independence Day (Year).mkv`
+* **Movie:** `/volume1/movies/Independence Day (1996)/Independence Day (1996).mkv`
 * **TV episode:** `/volume1/tv/Police Squad!/Season 1/Police Squad! - S01E01 - A Substantial Gift.mkv`
 
 The originals remain unchanged in the torrents folder for continued seeding, but can be deleted at will, thanks to the hard links.
