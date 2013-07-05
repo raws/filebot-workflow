@@ -13,9 +13,9 @@ def die(*messages)
   exit 1
 end
 
-def metadata(to, from = nil)
-  if from
-    value = @omdb_metadata[from]
+def metadata(key, omdb_metadata_key = nil)
+  if omdb_metadata_key
+    value = @omdb_metadata[omdb_metadata_key]
   end
 
   if block_given?
@@ -27,7 +27,7 @@ def metadata(to, from = nil)
     end
   end
 
-  @metadata[to] = value
+  @metadata[key] = value
 end
 
 def omdb(query)
