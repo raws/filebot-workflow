@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+# /opt/bin/bash
 # transmission-post-process.sh
 #
 # Rename and hard link a file using FileBot.
