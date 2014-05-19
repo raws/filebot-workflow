@@ -47,11 +47,11 @@ def omdb(query)
 end
 
 unless path = ARGV.first
-  die 'supply a path to a movie folder as an argument'
+  die 'supply a path to a movie as an argument'
 end
 
 unless File.basename(path) =~ /(.*) \((\d{4})\)/
-  die "#{path.inspect} is not a valid movie folder"
+  die "#{path.inspect} is not a valid movie name"
 end
 
 @title = $~[1]
@@ -70,7 +70,7 @@ match = results.find do |result|
 end
 
 unless match && match.is_a?(Hash)
-  die 'no match found', response.body
+  die 'no match found', response_json
 end
 
 @id = match['imdbID']
@@ -80,7 +80,7 @@ end
 
 metadata(:actors, 'Actors') { |actors| actors.split(/,\s*/) }
 metadata :director, 'Director'
-metadata :genre, 'Genre'
+metadata(:genres, 'Genre') { |genres| genres.split(/,\s*/) }
 
 metadata :imdb do
   { id: @id }.tap do |metadata|
@@ -136,4 +136,12 @@ metadata(:title) { @title }
 metadata(:type) { 'movie' }
 metadata(:writers, 'Writer') { |writers| writers.split(/,\s*/) }
 
-puts JSON.pretty_generate(@metadata)
+json = JSON.pretty_generate(@metadata)
+
+if json_path = ARGV[1]
+  File.open(json_path, 'w') do |io|
+    io.write json
+  end
+else
+  puts json
+end
